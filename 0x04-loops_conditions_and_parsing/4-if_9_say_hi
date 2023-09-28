@@ -2,14 +2,12 @@
 # display Best school 10 times
 #if 9 says Hi
 i=1
-j=9
-while ((i <= 10))
-	do
-		if [ $i -eq $j ]
-			then
-			echo "Hi"
-		else
-			echo "Best School"
-		fi
-		((i++))
+while [ $i -le 10 ]
+do
+	echo "Best School"
+	if [ $i -eq 9 ]
+	then
+		echo "Hi"
+	fi
+	i=$(( i+=1 ))
 done
