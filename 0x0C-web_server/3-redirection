@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# A script to install nginx on a server
+apt-get -y update
+apt-get -y install nginx
+service nginx start
+ufw allow 'Nginx HTTP'
+chown -R "$USER":"$USER" /var/www/html
+chmod -R 755 /var/www
+echo "Hello World!" > /var/www/html/index.html
+sudo sed -i "/listen 80 default_server;/a rewrite ^/redirect_me /https://www.linkedin.com/in/arif-bouchaib-39026a15a/ permanent;" /etc/nginx/sites-available/default
+nginx -s reload
+service nginx restart
