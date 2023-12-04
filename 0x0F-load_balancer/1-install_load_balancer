@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# A script that installs and configures HAProxy on your web servers.
+
+  apt-get -y update
+    apt-get -y install haproxy
+# Give the user ownership to HAProxy files
+  mkdir -p /etc/haproxy
+chown -R "$USER":"$USER" /etc/haproxy
+chmod -R 755 /etc/haproxy
+# Configure HAProxy
+  cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+cat <<EOF > /etc/haproxy/haproxy.cfg
+global
+  daemon
+  maxconn 256
+defaults
+  mode http
+  timeout connect 5000ms
+  timeout client 50000ms
+  timeout server 50000ms
+frontend arifbouchaib.tech
+  bind *:80
+  default_backend servers
+backend servers
+  balance roundrobin
+  server 371810-web-01 54.236.16.26:80 check
+  server 371810-web-02 54.158.195.234:80 check
+EOF
+# Enable HAProxy
+  touch /etc/default/haproxy
+chown -R "$USER":"$USER" /etc/default/haproxy
+chmod -R 755 /etc/default/haproxy
+echo "ENABLED=1" >> /etc/default/haproxy
+service haproxy start
